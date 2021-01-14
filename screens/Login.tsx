@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     },
     errorField: {
         color: 'red',
+        marginLeft: 20
     }
 });
 
