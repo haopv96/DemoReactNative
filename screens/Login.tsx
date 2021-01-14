@@ -8,8 +8,35 @@ interface LoginProps{
 
 export default function Login({navigation}: LoginProps) {
     const [email, setEmail] = useState<string>('')
-    const [passWork, setPassWork] = useState<string>('')
+    const [passWord, setPassWord] = useState<string>('')
     const [showPW, setShowPW] = useState<boolean>(false)
+    const [errorEmail, setErrorEmail] = useState<string>('')
+    const [errorPW, setErrorPW] = useState<string>('')
+
+    const validateEmail = (email: string) => {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+    
+    const handleBlurEmail = () => {
+        if (email === '') {
+            setErrorEmail('Please input your Email!')
+        } else if (!validateEmail(email)) {
+            setErrorEmail('Email is not a valid email!')
+        } else {
+            setErrorEmail('')
+        }
+
+    }
+
+    const handleBlurPassword = () => {
+        if (passWord === '') {
+            setErrorPW('Please input your Password!')
+        } else {
+            setErrorPW('')
+        }
+    }
+    
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.labelField}>Email or mobile number</Text>
@@ -20,25 +47,30 @@ export default function Login({navigation}: LoginProps) {
                     value={email}
                     autoCompleteType="email"
                     keyboardType="email-address"
+                    onBlur={handleBlurEmail}
                 />
+                {!!errorEmail && <Text style={styles.errorField}>{errorEmail}</Text>}
             </View>
             <View>
                 <Text style={styles.labelField}>Password</Text>
                 <View style={styles.inputPassword}>
                     <TextInput
                         style={styles.textField}
-                        onChangeText={text => setPassWork(text)}
-                        value={passWork}
+                        onChangeText={text => setPassWord(text)}
+                        value={passWord}
                         secureTextEntry={!showPW}
+                        onBlur={handleBlurPassword}
                     />
-                    <View  style={styles.eyeOutline}>
-                        <TouchableOpacity onPress={() => setShowPW(!showPW)} style={styles.eye}>
-                            <Ionicons name={showPW ? "md-eye-outline": "md-eye-off-outline"} size={24} color="black" />
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity onPress={() => setShowPW(!showPW)} style={styles.eye}>
+                        <Ionicons name={showPW ? "md-eye-outline": "md-eye-off-outline"} size={24} color="black" />
+                    </TouchableOpacity>
                 </View>
+                {!!errorPW && <Text style={styles.errorField}>{errorPW}</Text>}
             </View>
-            <TouchableOpacity style={styles.buttonLogin} onPress={() => {}}>
+            <TouchableOpacity style={styles.buttonLogin} onPress={() => {
+                handleBlurEmail()
+                handleBlurPassword()
+            }}>
                 <Text style={styles.textButton}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {}}>
@@ -67,7 +99,7 @@ const styles = StyleSheet.create({
         fontSize: 24
     },
     labelField: {
-        fontSize: 33,
+        fontSize: 30,
         fontWeight: "bold",
         color: '#000000',
         marginBottom: 20,
@@ -82,7 +114,7 @@ const styles = StyleSheet.create({
         minWidth: '100%',
         paddingLeft: 20,
         paddingRight: 20,
-        fontSize: 24
+        fontSize: 24,
     },
     textForgotPw: {
         marginTop: 22,
@@ -93,17 +125,13 @@ const styles = StyleSheet.create({
     inputPassword: {
         position: "relative"
     },
-    eyeOutline: {
-        position: "absolute",
-        right: 0,
-        left: 0,
-        top: 0,
-        bottom: 0,
-        justifyContent: "center",
-        alignItems: "flex-end",
-    },
     eye: {
-        marginRight: 15
+        position: "absolute",
+        top: '30%',
+        right: 15,
+    },
+    errorField: {
+        color: 'red',
     }
 });
 
