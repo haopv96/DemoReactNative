@@ -26,7 +26,6 @@ export default function Login({navigation}: LoginProps) {
         } else {
             setErrorEmail('')
         }
-
     }
 
     const handleBlurPassword = () => {
@@ -67,9 +66,13 @@ export default function Login({navigation}: LoginProps) {
                 </View>
                 {!!errorPW && <Text style={styles.errorField}>{errorPW}</Text>}
             </View>
-            <TouchableOpacity style={styles.buttonLogin} onPress={() => {
-                handleBlurEmail()
-                handleBlurPassword()
+            <TouchableOpacity style={styles.buttonLogin} onPress={async () => {
+                await handleBlurEmail()
+                await handleBlurPassword()
+
+                if (!errorEmail && !passWord) {
+                    navigation.navigate('SwiperScreen')
+                }
             }}>
                 <Text style={styles.textButton}>Login</Text>
             </TouchableOpacity>
