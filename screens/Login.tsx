@@ -48,7 +48,7 @@ export default function Login({navigation}: LoginProps) {
                     keyboardType="email-address"
                     onBlur={handleBlurEmail}
                 />
-                {!!errorEmail && <Text style={styles.errorField}>{errorEmail}</Text>}
+                <Text style={styles.errorField}>{errorEmail || ''}</Text>
             </View>
             <View>
                 <Text style={styles.labelField}>Password</Text>
@@ -64,7 +64,7 @@ export default function Login({navigation}: LoginProps) {
                         <Ionicons name={showPW ? "md-eye-outline": "md-eye-off-outline"} size={24} color="black" />
                     </TouchableOpacity>
                 </View>
-                {!!errorPW && <Text style={styles.errorField}>{errorPW}</Text>}
+                <Text style={styles.errorField}>{errorPW || ''}</Text>
             </View>
             <TouchableOpacity style={styles.buttonLogin} onPress={async () => {
                 await handleBlurEmail()
