@@ -67,6 +67,8 @@ export default function Login({navigation}: LoginProps) {
                 <Text style={styles.errorField}>{errorPW || ''}</Text>
             </View>
             <TouchableOpacity style={styles.buttonLogin} onPress={() => {
+                handleBlurEmail()
+                handleBlurPassword()
                 if (email && passWord) {
                     navigation.navigate('SwiperScreen')
                 }
