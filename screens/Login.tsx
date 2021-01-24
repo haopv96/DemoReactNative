@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {StyleSheet, Text, TextInput, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import {StyleSheet, Text, TextInput, SafeAreaView, TouchableOpacity, View, Image} from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
 
 interface LoginProps{
@@ -66,11 +66,8 @@ export default function Login({navigation}: LoginProps) {
                 </View>
                 <Text style={styles.errorField}>{errorPW || ''}</Text>
             </View>
-            <TouchableOpacity style={styles.buttonLogin} onPress={async () => {
-                await handleBlurEmail()
-                await handleBlurPassword()
-
-                if (!errorEmail && !passWord) {
+            <TouchableOpacity style={styles.buttonLogin} onPress={() => {
+                if (email && passWord) {
                     navigation.navigate('SwiperScreen')
                 }
             }}>
@@ -100,6 +97,16 @@ const styles = StyleSheet.create({
     textButton: {
         color: 'white',
         fontSize: 24
+    },
+    btnError: {
+        opacity: 0.5,
+        backgroundColor: '#000000',
+        height: 50,
+        minWidth: '100%',
+        borderRadius: 33,
+        justifyContent: 'center',
+        alignItems: "center",
+        marginTop: 60
     },
     labelField: {
         fontSize: 30,

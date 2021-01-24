@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react'
-import {StyleSheet, SafeAreaView, View, Text, Image} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react'
+import {StyleSheet, SafeAreaView, View, Image, Button, Text, TouchableOpacity} from 'react-native';
 import Swiper from 'react-native-deck-swiper'
 import axios from 'axios'
 
@@ -8,14 +8,15 @@ interface HomeProps{
 }
 
 export default function SwiperScreen({ navigation }: HomeProps) {
-    const [cardIndex, setCardIndex] = useState<number>(0)
-    const [swipedAllCards, setSwipedAllCards] = useState<boolean>(false)
+    const swiperRef = useRef<any>(null)
+    const [cardIndex] = useState<number>(0)
+    const [, setSwipedAllCards] = useState<boolean>(false)
     const [cards, setCards] = useState<any>([1, 2, 3, 4, 5, 6, 7, 8,9, 10])
 
     useEffect(() => {
         axios.get(`https://6001e2d508587400174db797.mockapi.io/getAnimal/GetListUrl`)
             .then(res => {
-                setCards(res);
+                setCards(res?.data);
             })
     }, [])
 
@@ -24,7 +25,7 @@ export default function SwiperScreen({ navigation }: HomeProps) {
             <View style={styles.card}>
                 <Image source={{
                     uri: card?.url,
-                }} style={{ width: 100, height: 100 }} />
+                }} style={{ flex: 1 }} />
             </View>
         )
     };
@@ -33,16 +34,19 @@ export default function SwiperScreen({ navigation }: HomeProps) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <Swiper
+                ref={swiperRef}
                 cards={cards}
                 cardIndex={cardIndex}
-                cardVerticalMargin={0}
+                cardHorizontalMargin={0}
                 renderCard={renderCard}
                 onSwipedAll={() => setSwipedAllCards(true)}
                 stackSeparation={15}
                 animateOverlayLabelsOpacity
                 animateCardOpacity
                 swipeBackCard
-            />
+            >
+                <Button onPress={() => swiperRef.current.swipeBack()} title='Swipe Back' />
+            </Swiper>
         </SafeAreaView>
     )
 };
@@ -61,6 +65,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 50,
         backgroundColor: 'transparent'
-    }
+    },
 })
 
